@@ -359,7 +359,10 @@
 "Assets/Scripts/AmbiencePlayer.cs"
 "Assets/Scripts/Flashlight.cs"
 "Assets/Scripts/mainMenu.cs"
+"Assets/Scripts/MusicObject.cs"
 "Assets/Scripts/PlayerController.cs"
+"Assets/Scripts/PlayMusic.cs"
+"Assets/Scripts/StopMusic.cs"
 -langversion:9.0
 /deterministic
 /optimize+
