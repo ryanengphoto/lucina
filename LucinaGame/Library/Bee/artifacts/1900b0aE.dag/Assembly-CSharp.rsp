@@ -363,6 +363,7 @@
 "Assets/Scripts/PlayerController.cs"
 "Assets/Scripts/PlayMusic.cs"
 "Assets/Scripts/StopMusic.cs"
+"Assets/Scripts/VolumeController.cs"
 -langversion:9.0
 /deterministic
 /optimize+
