@@ -738,7 +738,13 @@ PlayerSettings:
   XboxOneOverrideIdentityPublisher: 
   vrEditorSettings: {}
   cloudServicesEnabled:
+    Build: 0
+    Game Performance: 0
+    Legacy Analytics: 0
+    Purchasing: 0
+    UDP: 0
     UNet: 1
+    Unity Ads: 0
   luminIcon:
     m_Name: 
     m_ModelFolderPath: 
@@ -758,11 +764,11 @@ PlayerSettings:
   apiCompatibilityLevel: 6
   activeInputHandler: 0
   windowsGamepadBackendHint: 0
-  cloudProjectId: 3895e5da-7927-4e71-a1ea-5c7419b0875e
+  cloudProjectId: 117d737c-e7fe-4549-b9dd-78a697726645
   framebufferDepthMemorylessMode: 0
   qualitySettingsNames: []
-  projectName: Lucina 2025-01-13_21-04-29
-  organizationId: japasche
+  projectName: Lucina
+  organizationId: ryaneng
   cloudEnabled: 0
   legacyClampBlendShapeWeights: 0
   hmiLoadingImage: {fileID: 0}
