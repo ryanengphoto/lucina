@@ -1,5 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps.meta
 guid: d53c53f749719054bba5bc232e005204
+========
+guid: 8c23bf5fbabd90b4ab70c5e3e871c4df
+>>>>>>>> environment/level-design:LucinaGame/Assets/ASSETSTORE.meta
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps/Settings.meta
+guid: c718b9835bb19af498f2acc39c7f825b
+========
+guid: 5e1212929fb161f429b1dd132881d77f
+>>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps.meta
+>>>>>>> environment/level-design
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}

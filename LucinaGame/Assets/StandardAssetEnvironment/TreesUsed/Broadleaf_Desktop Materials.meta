@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 guid: ac1e2bcd42580e040a9fb02cfb01ec7e
 folderAsset: yes
 DefaultImporter:
@@ -6,3 +7,10 @@ DefaultImporter:
   userData: 
   assetBundleName: 
   assetBundleVariant: 
+=======
+guid: 76d1c0d83720ea445ba84ce7d478511a
+folderAsset: yes
+DefaultImporter:
+  userData: 
+  assetBundleName: 
+>>>>>>> environment/level-design

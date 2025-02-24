@@ -1,5 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps/SkySeries Freebie.meta
 guid: ca2d068540b69fb4f8ccd02c64d93364
+========
+guid: 709f11a7f3c4041caa4ef136ea32d874
+>>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps/Settings.meta
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps/Standard Assets.meta
+guid: 03ae11ddd55687f45aaf5bac529c894d
+========
+guid: 563cb0a531a0c0c49add1fa0438e7175
+>>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps/SkySeries Freebie.meta
+>>>>>>> environment/level-design
 folderAsset: yes
 DefaultImporter:
   externalObjects: {}
