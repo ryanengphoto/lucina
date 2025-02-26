@@ -1,7 +1,16 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt.meta
+guid: e828c3d9d8530aa4ab7d26fe667143fc
+========
+>>>>>>> Stashed changes
+=======
 <<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Sprites/EmojiOne Attribution.txt.meta
 guid: 381dcb09d5029d14897e55f98031fca5
 ========
+>>>>>>> main
 guid: da926959d8318a14eb7ab07a475cd761
 >>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps/update.txt.meta
 TextScriptImporter:

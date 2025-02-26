@@ -1,10 +1,21 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/Sounds/mixer.mixer.meta
+guid: 9d8a9a1e733eef0478a33968042bf587
+=======
 <<<<<<<< HEAD:LucinaGame/Assets/Sounds/mixer.mixer.meta
 guid: 31753da4dd28f3545bec35f1a496a2f3
+>>>>>>> main
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 24100000
 ========
+<<<<<<< HEAD
+>>>>>>> Stashed changes
+=======
+>>>>>>> main
 guid: 3d158b63cdc16014b9066323d699a057
 NativeFormatImporter:
   externalObjects: {}

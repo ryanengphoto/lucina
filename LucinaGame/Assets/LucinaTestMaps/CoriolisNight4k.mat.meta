@@ -1,9 +1,20 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+<<<<<<< Updated upstream
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset.meta
+guid: 1ac768ac2291a2644a9f98b98fde7f12
+timeCreated: 1484171803
+licenseType: Pro
+========
+>>>>>>> Stashed changes
+=======
 <<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset.meta
 guid: 2e498d1c8094910479dc3e1b768306a4
 timeCreated: 1484171803
 licenseType: Pro
 ========
+>>>>>>> main
 guid: 4a40246bf09014d4db991bf739cf40c8
 timeCreated: 1509145586
 licenseType: Store
