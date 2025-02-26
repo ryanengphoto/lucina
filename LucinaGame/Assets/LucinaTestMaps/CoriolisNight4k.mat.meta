@@ -1,4 +1,5 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 <<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset.meta
@@ -7,11 +8,18 @@ timeCreated: 1484171803
 licenseType: Pro
 ========
 >>>>>>> Stashed changes
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Resources/Fonts & Materials/LiberationSans SDF - Fallback.asset.meta
+guid: 2e498d1c8094910479dc3e1b768306a4
+timeCreated: 1484171803
+licenseType: Pro
+========
+>>>>>>> main
 guid: 4a40246bf09014d4db991bf739cf40c8
 timeCreated: 1509145586
 licenseType: Store
+>>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps/CoriolisNight4k.mat.meta
 NativeFormatImporter:
-  mainObjectFileID: 2100000
   userData: 
   assetBundleName: 
   assetBundleVariant: 

@@ -1,5 +1,9 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
+guid: bccb8259f4d0e8042a119960c7a4dc58
+=======
 guid: 7136d20c0c1059c4dab1746cd03f6497
+>>>>>>> environment/level-design
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 2100000

@@ -51,5 +51,6 @@
         "temp/": true,
         "Temp/": true
     },
-    "dotnet.defaultSolution": "LucinaGame.sln"
+    "dotnet.defaultSolution": "LucinaGame.sln",
+    "C_Cpp.default.compilerPath": "c:\\MinGW\\bin\\gcc.exe"
 }

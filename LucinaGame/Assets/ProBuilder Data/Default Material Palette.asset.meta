@@ -1,11 +1,18 @@
 fileFormatVersion: 2
+<<<<<<< HEAD
 <<<<<<< Updated upstream
 =======
 <<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Fonts/ArtsyNight SDF.asset.meta
 guid: a7b30aefa2f3ae4468dc7574d18ab2b8
 ========
 >>>>>>> Stashed changes
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Fonts/ArtsyNight SDF.asset.meta
+guid: 85589e8f7adade846a7d32fb254cc730
+========
+>>>>>>> main
 guid: 9695043650c413148bf8580622bfbd2b
+>>>>>>>> environment/level-design:LucinaGame/Assets/ProBuilder Data/Default Material Palette.asset.meta
 NativeFormatImporter:
   externalObjects: {}
   mainObjectFileID: 11400000
