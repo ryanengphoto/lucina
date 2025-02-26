@@ -1,4 +1,10 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/TextMesh Pro/Fonts/ArtsyNight SDF 1.asset.meta
+guid: bb2d5efc87bf8db4ca8f8613d6be7017
+========
+>>>>>>> Stashed changes
 guid: 18dc0cd2c080841dea60987a38ce93fa
 NativeFormatImporter:
   externalObjects: {}

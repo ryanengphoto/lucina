@@ -1,4 +1,17 @@
 fileFormatVersion: 2
+<<<<<<< Updated upstream
+=======
+<<<<<<< HEAD
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps.meta
+guid: 21cce9b54bfb45442864a69f15e124fb
+========
+guid: 8c23bf5fbabd90b4ab70c5e3e871c4df
+>>>>>>>> environment/level-design:LucinaGame/Assets/ASSETSTORE.meta
+=======
+<<<<<<<< HEAD:LucinaGame/Assets/LucinaTestMaps/Settings.meta
+guid: c718b9835bb19af498f2acc39c7f825b
+========
+>>>>>>> Stashed changes
 guid: 5e1212929fb161f429b1dd132881d77f
 folderAsset: yes
 DefaultImporter:
