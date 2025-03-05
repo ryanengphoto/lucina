@@ -476,8 +476,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Quit
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e7995a47278c87a44919994398e7af38, type: 2}
-  m_sharedMaterial: {fileID: 4197557596702101125, guid: e7995a47278c87a44919994398e7af38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -886,8 +886,8 @@ MonoBehaviour:
 
 '
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e7995a47278c87a44919994398e7af38, type: 2}
-  m_sharedMaterial: {fileID: 4197557596702101125, guid: e7995a47278c87a44919994398e7af38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1095,8 +1095,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Start Game
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e7995a47278c87a44919994398e7af38, type: 2}
-  m_sharedMaterial: {fileID: 4197557596702101125, guid: e7995a47278c87a44919994398e7af38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -1362,8 +1362,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: Lucina
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: e7995a47278c87a44919994398e7af38, type: 2}
-  m_sharedMaterial: {fileID: 4197557596702101125, guid: e7995a47278c87a44919994398e7af38, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 67bd8faf4e517bc4cb4c6aca2f294108, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
