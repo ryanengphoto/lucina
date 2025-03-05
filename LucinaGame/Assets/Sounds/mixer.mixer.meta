@@ -1,15 +1,8 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:LucinaGame/Assets/Sounds/mixer.mixer.meta
-guid: 31753da4dd28f3545bec35f1a496a2f3
+guid: 6d39e03e1fd486f41afc5fb87d7360a3
 NativeFormatImporter:
   externalObjects: {}
-  mainObjectFileID: 24100000
-========
-guid: 3d158b63cdc16014b9066323d699a057
-NativeFormatImporter:
-  externalObjects: {}
-  mainObjectFileID: 15600000
->>>>>>>> environment/level-design:LucinaGame/Assets/LucinaTestMaps/New Terrain 1.asset.meta
+  mainObjectFileID: 0
   userData: 
   assetBundleName: 
   assetBundleVariant: 
