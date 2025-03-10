@@ -31,7 +31,7 @@ public class DeathAnimation : MonoBehaviour
         videoPlayer.gameObject.SetActive(false);
 
         string gameOverMessage = "Game Over";
-        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/8";
+        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/3";
 
         yield return StartCoroutine(TypeText(gameOverText, gameOverMessage));
 
@@ -56,12 +56,12 @@ public class DeathAnimation : MonoBehaviour
     private void TryAgain()
     {
         keyPressAudio.Play();  
-        SceneManager.LoadScene("Jacob");
+        SceneManager.LoadScene("MAIN_MAP");
     }
 
     private void QuitGame()
     {
         keyPressAudio.Play();  
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MAIN_MENU");
     }
 }

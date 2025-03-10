@@ -8,7 +8,7 @@ public class mainMenu : MonoBehaviour
 {
 
     public void startGame() {
-        SceneManager.LoadScene("Main");
+        SceneManager.LoadScene("MAIN_MAP");
     }
 
     public void quitGame() {
@@ -16,11 +16,11 @@ public class mainMenu : MonoBehaviour
     }
 
     public void goOptions() {
-        SceneManager.LoadScene("OptionsMenu");
+        SceneManager.LoadScene("OPTIONS_MENU");
     }   
 
     public void goMenu() {
-        SceneManager.LoadScene("MainMenu");
+        SceneManager.LoadScene("MAIN_MENU");
     } 
 
 

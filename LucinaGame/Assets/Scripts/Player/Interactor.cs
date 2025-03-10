@@ -1,7 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
+using UnityEngine.SceneManagement; 
 
 interface IInteractable
 {
@@ -15,6 +15,8 @@ public class Interactor : MonoBehaviour
     public Transform InteractorSource;
     public float InteractRange;
     public TextMeshProUGUI momentosText;
+    public AudioSource audioSource;
+    public AudioSource sirenSound;
 
     private void Start()
     {
@@ -39,6 +41,20 @@ public class Interactor : MonoBehaviour
                     GameManager.Instance.momentos++;
                     UpdateMomentosText();
                     interactObj.Interact();
+
+                    if (audioSource != null)
+                    {
+                        audioSource.Play();
+                    }
+
+                    if (GameManager.Instance.momentos == 1)
+                    {
+                        StartCoroutine(PlaySirenAfterDelay(5f));  
+                    }
+                    else if (GameManager.Instance.momentos == 3)
+                    {
+                        SceneManager.LoadScene("WIN_SCENE");
+                    }
                 }
             }
         }
@@ -49,6 +65,20 @@ public class Interactor : MonoBehaviour
                 openCross.SetActive(false);
                 closedCross.SetActive(true);
             }
+        }
+    }
+
+    private IEnumerator PlaySirenAfterDelay(float delay)
+    {
+        yield return new WaitForSeconds(delay); 
+
+        if (sirenSound != null)
+        {
+            sirenSound.Play(); 
+        }
+        else
+        {
+            Debug.LogWarning("SirenAudioSource is not assigned!");
         }
     }
 

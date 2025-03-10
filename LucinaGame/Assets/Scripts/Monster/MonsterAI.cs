@@ -6,29 +6,42 @@ using UnityEngine.AI;
 public class MonsterAI : MonoBehaviour
 {
     public Transform[] teleportSpots;
-    public float spookedRadius = 15f;
-    public AudioSource spookedSound;
     public GameObject player;
     private Vector3 targetPosition;
     private bool isPlayerLooking = false;
-    private bool hasSpooked = false;
     private NavMeshAgent navMeshAgent;
     private bool seen = false;
     public LookAtMonster lookatmonsterScript;
     private Transform prevSpot;
-    private Transform randomSpot;
+    private Vector3 lastPosition;
+    private float stuckTimer = 0f;
+    private float stuckThreshold = 5f;
 
     private void Start()
     {
         navMeshAgent = GetComponent<NavMeshAgent>();
+        lastPosition = transform.position;
         Teleport();
     }
 
     private void Update()
     {
-        if (seen && !isPlayerLooking)
+        FacePlayer();
+        if (Vector3.Distance(lastPosition, transform.position) < 0.1f)
+        {
+            stuckTimer += Time.deltaTime;
+        }
+        else
+        {
+            stuckTimer = 0f;
+        }
+
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+
+        if (seen && !isPlayerLooking && (distanceToPlayer <= 75 || stuckTimer >= stuckThreshold && distanceToPlayer >= 40))
         {
             Teleport();
+            stuckTimer = 0f; 
         }
 
         CheckIfPlayerIsLooking();
@@ -37,6 +50,16 @@ public class MonsterAI : MonoBehaviour
         {
             MoveTowardPlayer();
         }
+        else if (isPlayerLooking)
+        {
+            navMeshAgent.speed = 0f;
+        }
+        else
+        {
+            navMeshAgent.speed = 10f;
+        }
+
+        lastPosition = transform.position;
     }
 
     private void CheckIfPlayerIsLooking()
@@ -45,11 +68,6 @@ public class MonsterAI : MonoBehaviour
         {
             isPlayerLooking = true;
             seen = true;
-
-            if (isPlayerLooking && !hasSpooked && Vector3.Distance(player.transform.position, transform.position) <= spookedRadius)
-            {
-                PlaySpookedSound();
-            }
         }
         else
         {
@@ -65,24 +83,29 @@ public class MonsterAI : MonoBehaviour
     private void Teleport()
     {
         Transform randomSpot;
-        
+
+        int startRange = GameManager.Instance.momentos >= 2 ? 4 : 0; 
+        int endRange = GameManager.Instance.momentos >= 2 ? teleportSpots.Length : 8; 
+
         do
         {
-            randomSpot = teleportSpots[Random.Range(0, teleportSpots.Length)];
+            randomSpot = teleportSpots[Random.Range(startRange, endRange)];
         }
         while (randomSpot == prevSpot);
 
         targetPosition = randomSpot.position;
         prevSpot = randomSpot;
         transform.position = targetPosition;
-        hasSpooked = false;
         seen = false;
-        Debug.Log("teleportinh");
     }
 
-    private void PlaySpookedSound()
+    private void FacePlayer()
     {
-        spookedSound.Play();
-        hasSpooked = true;
+        Vector3 directionToPlayer = player.transform.position - transform.position;
+        directionToPlayer.y = 0; 
+        
+        Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
+
+        transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); 
     }
 }
