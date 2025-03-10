@@ -263,14 +263,15 @@ public class PlayerMovement : MonoBehaviour
         transform.Rotate(Vector3.up * mouseX);
     }
 
-    private void PlayRandomFootstepSound() // sounds for footsteps --- janky needs beter solution
+    private void PlayRandomFootstepSound() // sounds for footsteps --- janky needs better solution
+{
+    if (footstepSounds.Length > 0)
     {
-        if (footstepSounds.Length > 0)
-        {
-            int randomIndex = Random.Range(0, footstepSounds.Length);
-            audioSource.PlayOneShot(footstepSounds[randomIndex], 0.5f);
-        }
+        int randomIndex = Random.Range(0, footstepSounds.Length);
+        audioSource.PlayOneShot(footstepSounds[randomIndex], 0.25f); // Adjusted to 0.25f (half of 0.5f)
     }
+}
+
 
     private void HandleHeadBobbing() // adds "realistic" movement of camera
     {

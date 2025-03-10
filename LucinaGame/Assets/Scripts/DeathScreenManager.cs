@@ -25,7 +25,7 @@ public class DeathScreenManager : MonoBehaviour
         videoPlayer.gameObject.SetActive(false);
 
         string gameOverMessage = "Game Over";
-        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/8";  // Fetch from GameManager
+        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/8";  
 
         yield return StartCoroutine(TypeText(gameOverText, gameOverMessage));
 

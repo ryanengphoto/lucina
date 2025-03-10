@@ -582,7 +582,7 @@ GameObject:
   - component: {fileID: 525278407}
   - component: {fileID: 525278406}
   m_Layer: 5
-  m_Name: momentos
+  m_Name: mementos
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -629,8 +629,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 8f586378b4e144a9851e7b34d9b748ee, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 59bcdb1ad7131b04395df2d0048298ef, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 59bcdb1ad7131b04395df2d0048298ef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []
@@ -763,8 +763,8 @@ MonoBehaviour:
       m_Calls: []
   m_text: 
   m_isRightToLeft: 0
-  m_fontAsset: {fileID: 11400000, guid: 888d7a1f135c1b14fbc721ffab189211, type: 2}
-  m_sharedMaterial: {fileID: 2180264, guid: 888d7a1f135c1b14fbc721ffab189211, type: 2}
+  m_fontAsset: {fileID: 11400000, guid: 59bcdb1ad7131b04395df2d0048298ef, type: 2}
+  m_sharedMaterial: {fileID: 4197557596702101125, guid: 59bcdb1ad7131b04395df2d0048298ef, type: 2}
   m_fontSharedMaterials: []
   m_fontMaterial: {fileID: 0}
   m_fontMaterials: []

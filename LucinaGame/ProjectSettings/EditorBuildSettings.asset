@@ -9,14 +9,14 @@ EditorBuildSettings:
     path: Assets/Scenes/MAIN_MENU.unity
     guid: 6996a57bc5b204947a71eae1c320d27b
   - enabled: 1
-    path: Assets/Scenes/JAKE_TEST_BASE.unity
-    guid: 9fc0d4010bbf28b4594072e72b8655ab
-  - enabled: 1
     path: Assets/Scenes/OPTIONS_MENU.unity
     guid: 40576fc65c060f74391e8dd7494274f6
   - enabled: 1
-    path: Assets/Scenes/Main.unity
-    guid: 916d3acd499cc824687d496c25e1e27f
+    path: Assets/Scenes/MAIN_MAP.unity
+    guid: 67c023d4fae564443941be0662d64fdc
+  - enabled: 1
+    path: Assets/Scenes/WIN_SCENE.unity
+    guid: 17f97591e144ade42ae5f9f1eedbb4b0
   - enabled: 1
     path: Assets/Scenes/DEATH_SCENE.unity
     guid: 04421c9d0c872384faede5527d22dd11
