@@ -3,7 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using Kino;
 using UnityEngine.UI;
-using UnityEngine.SceneManagement; 
+using UnityEngine.SceneManagement;
+
 public class LookAtMonster : MonoBehaviour
 {
     public AnalogGlitch glitchEffect;
@@ -19,7 +20,15 @@ public class LookAtMonster : MonoBehaviour
     public AudioSource jumpscareSound;
     public AudioSource heartBeat;
     public GameObject jumpscareImage;
-    public float jumpscareDuration = 1f; 
+    public float jumpscareDuration = 1f;
+
+    private void OnCollisionEnter(Collision collision)
+    {
+        if (collision.gameObject.CompareTag("Monster"))
+        {
+            health = 0;
+        }
+    }
 
     void Start()
     {
@@ -29,11 +38,15 @@ public class LookAtMonster : MonoBehaviour
     void Update()
     {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(playerCam);
-        if (GeometryUtility.TestPlanesAABB(planes, Monster.GetComponent<Renderer>().bounds)) {
+        if (GeometryUtility.TestPlanesAABB(planes, Monster.GetComponent<Renderer>().bounds))
+        {
             looking = true;
-        } else {
+        }
+        else
+        {
             looking = false;
         }
+        
         if (detectedScript.detected && looking && Vector3.Distance(transform.position, Monster.transform.position) <= 35.0f)
         {
             glitchEffect.scanLineJitter += Time.deltaTime / 1.5f;
@@ -42,59 +55,74 @@ public class LookAtMonster : MonoBehaviour
             heartBeat.volume += Time.deltaTime;
             health -= damage * Time.deltaTime;
         }
-        else if (detectedScript.detected && looking && Vector3.Distance(transform.position, Monster.transform.position) <= 50.0f) {
+        else if (detectedScript.detected && looking && Vector3.Distance(transform.position, Monster.transform.position) <= 50.0f)
+        {
             glitchEffect.scanLineJitter += Time.deltaTime / 5f;
             glitchEffect.colorDrift += Time.deltaTime / 5f;
-            glitchSound.volume += Time.deltaTime/ 25;
-            heartBeat.volume += Time.deltaTime/ 25;
-            health -= damage * Time.deltaTime/ 25;
+            glitchSound.volume += Time.deltaTime / 25;
+            heartBeat.volume += Time.deltaTime / 25;
+            health -= damage * Time.deltaTime / 25;
         }
-        else if (detectedScript.detected && looking && Vector3.Distance(transform.position, Monster.transform.position) <= 100.0f) {
-            if(glitchEffect.scanLineJitter >= 0.2f){
+        else if (detectedScript.detected && looking && Vector3.Distance(transform.position, Monster.transform.position) <= 100.0f)
+        {
+            if (glitchEffect.scanLineJitter >= 0.2f)
+            {
                 glitchEffect.scanLineJitter = 0.2f;
             }
-            if(glitchEffect.colorDrift >= 0.2f){
+            if (glitchEffect.colorDrift >= 0.2f)
+            {
                 glitchEffect.colorDrift = 0.2f;
             }
-            if(heartBeat.volume >= 0.2f){
+            if (heartBeat.volume >= 0.2f)
+            {
                 heartBeat.volume = 0.2f;
             }
             glitchEffect.scanLineJitter += Time.deltaTime / 50f;
             glitchEffect.colorDrift += Time.deltaTime / 50f;
-            heartBeat.volume += Time.deltaTime/ 50;
-        } 
-        else 
+            heartBeat.volume += Time.deltaTime / 50;
+        }
+        else
         {
-            if (glitchEffect.scanLineJitter > 0) {
-                glitchEffect.scanLineJitter -= Time.deltaTime/ 1.5f;
+            if (glitchEffect.scanLineJitter > 0)
+            {
+                glitchEffect.scanLineJitter -= Time.deltaTime / 1.5f;
             }
-            if (glitchEffect.scanLineJitter > 0) {
-                glitchEffect.scanLineJitter -= Time.deltaTime/ 1.5f;
+            if (glitchEffect.colorDrift > 0)
+            {
+                glitchEffect.colorDrift -= Time.deltaTime / 1.5f;
             }
-            if (glitchEffect.colorDrift > 0) {
-                glitchEffect.colorDrift -= Time.deltaTime/ 1.5f;
-            }
-            if (glitchSound.volume > 0) {
-                if(glitchSound.volume <= 0.01){
+            if (glitchSound.volume > 0)
+            {
+                if (glitchSound.volume <= 0.01)
+                {
                     glitchSound.volume -= Time.deltaTime / 50;
-                } else if(glitchSound.volume <= 0.05){
+                }
+                else if (glitchSound.volume <= 0.05)
+                {
                     glitchSound.volume -= Time.deltaTime / 10;
-                } else {
+                }
+                else
+                {
                     glitchSound.volume -= Time.deltaTime / 2.5f;
                 }
             }
-            if (heartBeat.volume > 0) {
-                heartBeat.volume -= Time.deltaTime/10;
+            if (heartBeat.volume > 0)
+            {
+                heartBeat.volume -= Time.deltaTime / 10;
             }
 
-            if (health < 100) {
+            if (health < 100)
+            {
                 health += regenRate * Time.deltaTime;
-            } else {
+            }
+            else
+            {
                 health = 100;
             }
         }
 
-        if (health <= 0) {
+        if (health <= 0)
+        {
             glitchEffect.scanLineJitter = 2;
             glitchEffect.colorDrift = 2;
             glitchSound.volume = 1.5f;
@@ -108,15 +136,15 @@ public class LookAtMonster : MonoBehaviour
         {
             jumpscareSound.Play();
         }
-        
+
         jumpscareImage.SetActive(true);
-        
+
         float flickerDuration = 2f;
         float flickerTime = 0f;
 
         while (flickerTime < flickerDuration)
         {
-            jumpscareImage.SetActive(!jumpscareImage.activeSelf); 
+            jumpscareImage.SetActive(!jumpscareImage.activeSelf);
             flickerTime += 0.1f;
             yield return new WaitForSeconds(0.1f);  
         }
@@ -126,8 +154,8 @@ public class LookAtMonster : MonoBehaviour
         yield return new WaitForSeconds(flickerDuration - flickerTime);
 
         jumpscareImage.SetActive(false);
-        
+
+        // Load the death scene after the jumpscare
         SceneManager.LoadScene("DEATH_SCENE");
     }
-
 }

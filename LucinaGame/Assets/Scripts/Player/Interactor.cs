@@ -38,7 +38,7 @@ public class Interactor : MonoBehaviour
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
-                    GameManager.Instance.momentos++;
+                    GameManager.Instance.UpdateMomentos(1);
                     UpdateMomentosText();
                     interactObj.Interact();
 
@@ -72,21 +72,14 @@ public class Interactor : MonoBehaviour
     {
         yield return new WaitForSeconds(delay); 
 
-        if (sirenSound != null)
-        {
-            sirenSound.Play(); 
-        }
-        else
-        {
-            Debug.LogWarning("SirenAudioSource is not assigned!");
-        }
+        sirenSound.Play(); 
     }
 
     void UpdateMomentosText()
     {
         if (momentosText != null)
         {
-            momentosText.text = "Momentos: " + GameManager.Instance.momentos.ToString();
+            momentosText.text = "Mementos: " + GameManager.Instance.momentos.ToString();
         }
     }
 }

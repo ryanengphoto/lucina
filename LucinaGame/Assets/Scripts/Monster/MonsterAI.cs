@@ -16,6 +16,11 @@ public class MonsterAI : MonoBehaviour
     private Vector3 lastPosition;
     private float stuckTimer = 0f;
     private float stuckThreshold = 5f;
+    private float lowMovementThreshold = 0.4f;  // Minimum distance before considering it low movement
+    private float lowMovementTime = 0f;  // Timer to track how long the monster is moving slowly
+
+    // Footsteps AudioSource
+    public AudioSource footstepsAudioSource;
 
     private void Start()
     {
@@ -27,6 +32,45 @@ public class MonsterAI : MonoBehaviour
     private void Update()
     {
         FacePlayer();
+
+        // Calculate distance to player
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+
+        // Teleport if necessary based on distance to player or if stuck
+        if (seen && !isPlayerLooking && (distanceToPlayer <= 75 || stuckTimer >= stuckThreshold && distanceToPlayer >= 40))
+        {
+            Teleport();
+            stuckTimer = 0f; 
+        }
+
+        // Check if the player is looking at the monster
+        CheckIfPlayerIsLooking();
+
+        // Move toward the player unless the player is looking
+        if (!isPlayerLooking)
+        {
+            navMeshAgent.speed = 10f;
+            MoveTowardPlayer();
+        }
+        else if (isPlayerLooking)
+        {
+            navMeshAgent.speed = 0f;
+        }
+
+        if (IsMovingVeryLittle() && !isPlayerLooking)
+        {
+            lowMovementTime += Time.deltaTime;
+            if (lowMovementTime >= stuckThreshold)
+            {
+                Teleport();
+                lowMovementTime = 0f;
+            }
+        }
+        else
+        {
+            lowMovementTime = 0f; 
+        }
+
         if (Vector3.Distance(lastPosition, transform.position) < 0.1f)
         {
             stuckTimer += Time.deltaTime;
@@ -36,28 +80,7 @@ public class MonsterAI : MonoBehaviour
             stuckTimer = 0f;
         }
 
-        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-
-        if (seen && !isPlayerLooking && (distanceToPlayer <= 75 || stuckTimer >= stuckThreshold && distanceToPlayer >= 40))
-        {
-            Teleport();
-            stuckTimer = 0f; 
-        }
-
-        CheckIfPlayerIsLooking();
-
-        if (!isPlayerLooking)
-        {
-            MoveTowardPlayer();
-        }
-        else if (isPlayerLooking)
-        {
-            navMeshAgent.speed = 0f;
-        }
-        else
-        {
-            navMeshAgent.speed = 10f;
-        }
+        HandleFootstepsSound();
 
         lastPosition = transform.position;
     }
@@ -107,5 +130,25 @@ public class MonsterAI : MonoBehaviour
         Quaternion targetRotation = Quaternion.LookRotation(directionToPlayer);
 
         transform.rotation = Quaternion.Slerp(transform.rotation, targetRotation, Time.deltaTime * 5f); 
+    }
+
+    private bool IsMovingVeryLittle()
+    {
+        float distanceMoved = Vector3.Distance(lastPosition, transform.position);
+
+        return distanceMoved < lowMovementThreshold;
+    }
+
+    // Function to handle footsteps sound
+    private void HandleFootstepsSound()
+    {
+        if (navMeshAgent.velocity.magnitude > 0.1f && !footstepsAudioSource.isPlaying) // If the monster is moving and the sound is not already playing
+        {
+            footstepsAudioSource.Play();  // Play the footsteps sound
+        }
+        else if (navMeshAgent.velocity.magnitude <= 0.1f && footstepsAudioSource.isPlaying) // If the monster stops moving and the sound is playing
+        {
+            footstepsAudioSource.Stop();  // Stop the footsteps sound
+        }
     }
 }
