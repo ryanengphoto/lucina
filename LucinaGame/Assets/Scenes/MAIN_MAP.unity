@@ -13458,6 +13458,12 @@ MonoBehaviour:
   - {fileID: 8300000, guid: d92f3aaefb0aefb459a49488e57dce3f, type: 3}
   - {fileID: 8300000, guid: 90553eba78e0f3a419cd4ad28218062c, type: 3}
   - {fileID: 8300000, guid: ae4963e588049484787945c6cb744f49, type: 3}
+  ambience: {fileID: 467401478}
+  glitch: {fileID: 54920429}
+  jumpscare: {fileID: 1622260067}
+  heartbeat: {fileID: 1172605810}
+  breathing: {fileID: 1567079790}
+  siren: {fileID: 1883887624}
   swayAmount: 0
   swaySpeed: 9.5
   swayIntensity: 15

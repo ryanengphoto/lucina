@@ -1,6 +1,7 @@
 //using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -60,6 +61,15 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip[] footstepSounds;
     private float footstepInterval = 0.7f;
     private float timeSinceLastStep = 0f;
+    // Audio sources we care about pausing
+    public AudioSource ambience;
+    public AudioSource glitch;
+    public AudioSource jumpscare;
+    public AudioSource heartbeat;
+    public AudioSource breathing;
+    public AudioSource siren;
+    
+
 
     [Header("Random")]
     // these are for  the flashlight while sprinting
@@ -327,6 +337,31 @@ public class PlayerMovement : MonoBehaviour
             Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
             Cursor.visible = isPaused;
             Time.timeScale = isPaused ? 0 : 1;
+            
+            if (isPaused) 
+            {
+                audioSource.Pause();
+                ambience.Pause();
+                glitch.Pause();
+                jumpscare.Pause();
+                heartbeat.Pause();
+                breathing.Pause();
+                siren.Pause();
+            }
+                
+
+                
+            else 
+            {
+                audioSource.UnPause();
+                ambience.UnPause();
+                glitch.UnPause();
+                jumpscare.UnPause();
+                heartbeat.UnPause();
+                breathing.UnPause();
+                siren.UnPause();                
+            }
+
 
             pauseCanvas.gameObject.SetActive(isPaused);
         }
