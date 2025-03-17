@@ -13,10 +13,12 @@ public class PlayerMovement : MonoBehaviour
     public Transform flashLight;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.C;
+    public KeyCode pauseKey = KeyCode.Escape;
     private CharacterController controller;
     private Vector3 velocity;
     private float verticalRotation = 0f;
     private bool moving = false;
+    private bool isPaused = false;
 
     [Header("Sprinting")]
     public float sprintSpeed = 8f;
@@ -65,6 +67,9 @@ public class PlayerMovement : MonoBehaviour
     public float swaySpeed = 3f; 
     public float swayIntensity = 5f; 
 
+    [Header("Pause Menu")]
+    public Canvas pauseCanvas;
+
     void Start()
     {
         controller = GetComponent<CharacterController>();
@@ -77,24 +82,32 @@ public class PlayerMovement : MonoBehaviour
         defaultCameraHeight = _camera.transform.localPosition.y; // for crouching
         sliderCanvasGroup.alpha = 0; // stamina UI is not there when full on start
         targetRotation = flashLight.rotation; // inital flashlight rotation
+
+        pauseCanvas.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        // player movement
-        HandleMovement();
+        if (!isPaused) 
+        {
+            // player movement
+            HandleMovement();
 
-        // camera tilt based on movement
-        UpdateTilt();
+            // camera tilt based on movement
+            UpdateTilt();
 
-        // mouse movement
-        MouseLook();
+            // mouse movement
+            MouseLook();
 
-        // head bobbing effect
-        HandleHeadBobbing();
+            // head bobbing effect
+            HandleHeadBobbing();
 
-        // for flashlight while sprinting
-        SmoothRotateFlashlight();
+            // for flashlight while sprinting
+            SmoothRotateFlashlight();
+        }
+
+        // for pausing
+        HandlePausing();
     }
 
     private void HandleMovement()
@@ -305,4 +318,28 @@ public class PlayerMovement : MonoBehaviour
             );
         }
     }
+
+    private void HandlePausing() 
+    {
+        if (Input.GetKeyDown(pauseKey))
+        {
+            isPaused = !isPaused;
+            Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
+            Cursor.visible = isPaused;
+            Time.timeScale = isPaused ? 0 : 1;
+
+            pauseCanvas.gameObject.SetActive(isPaused);
+        }
+
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        pauseCanvas.gameObject.SetActive(isPaused);
+        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
 }
