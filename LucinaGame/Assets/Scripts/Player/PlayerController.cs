@@ -1,6 +1,7 @@
 //using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
+using UnityEngine.Audio;
 
 public class PlayerMovement : MonoBehaviour
 {
@@ -13,10 +14,12 @@ public class PlayerMovement : MonoBehaviour
     public Transform flashLight;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.C;
+    public KeyCode pauseKey = KeyCode.Escape;
     private CharacterController controller;
     private Vector3 velocity;
     private float verticalRotation = 0f;
     private bool moving = false;
+    private bool isPaused = false;
 
     [Header("Sprinting")]
     public float sprintSpeed = 8f;
@@ -58,12 +61,24 @@ public class PlayerMovement : MonoBehaviour
     public AudioClip[] footstepSounds;
     private float footstepInterval = 0.7f;
     private float timeSinceLastStep = 0f;
+    // Audio sources we care about pausing
+    public AudioSource ambience;
+    public AudioSource glitch;
+    public AudioSource jumpscare;
+    public AudioSource heartbeat;
+    public AudioSource breathing;
+    public AudioSource siren;
+    
+
 
     [Header("Random")]
     // these are for  the flashlight while sprinting
     public float swayAmount = 0f;
     public float swaySpeed = 3f; 
     public float swayIntensity = 5f; 
+
+    [Header("Pause Menu")]
+    public Canvas pauseCanvas;
 
     void Start()
     {
@@ -77,24 +92,32 @@ public class PlayerMovement : MonoBehaviour
         defaultCameraHeight = _camera.transform.localPosition.y; // for crouching
         sliderCanvasGroup.alpha = 0; // stamina UI is not there when full on start
         targetRotation = flashLight.rotation; // inital flashlight rotation
+
+        pauseCanvas.gameObject.SetActive(false);
     }
 
     void Update()
     {
-        // player movement
-        HandleMovement();
+        if (!isPaused) 
+        {
+            // player movement
+            HandleMovement();
 
-        // camera tilt based on movement
-        UpdateTilt();
+            // camera tilt based on movement
+            UpdateTilt();
 
-        // mouse movement
-        MouseLook();
+            // mouse movement
+            MouseLook();
 
-        // head bobbing effect
-        HandleHeadBobbing();
+            // head bobbing effect
+            HandleHeadBobbing();
 
-        // for flashlight while sprinting
-        SmoothRotateFlashlight();
+            // for flashlight while sprinting
+            SmoothRotateFlashlight();
+        }
+
+        // for pausing
+        HandlePausing();
     }
 
     private void HandleMovement()
@@ -304,5 +327,54 @@ public class PlayerMovement : MonoBehaviour
                 _camera.transform.localPosition.z
             );
         }
+    }
+
+    private void HandlePausing() 
+    {
+        if (Input.GetKeyDown(pauseKey))
+        {
+            isPaused = !isPaused;
+            Cursor.lockState = isPaused ? CursorLockMode.Confined : CursorLockMode.Locked;
+            Cursor.visible = isPaused;
+            Time.timeScale = isPaused ? 0 : 1;
+            
+            if (isPaused) 
+            {
+                audioSource.Pause();
+                ambience.Pause();
+                glitch.Pause();
+                jumpscare.Pause();
+                heartbeat.Pause();
+                breathing.Pause();
+                siren.Pause();
+            }
+            else 
+            {
+                audioSource.UnPause();
+                ambience.UnPause();
+                glitch.UnPause();
+                jumpscare.UnPause();
+                heartbeat.UnPause();
+                breathing.UnPause();
+                siren.UnPause();                
+            }
+
+            pauseCanvas.gameObject.SetActive(isPaused);
+        }
+
+    }
+
+    public void ResumeGame()
+    {
+        isPaused = false;
+        Time.timeScale = 1;
+        pauseCanvas.gameObject.SetActive(isPaused);
+        Cursor.lockState = CursorLockMode.Locked;
+        Cursor.visible = false;
+    }
+
+    public void quitGame()
+    {
+        Application.Quit();
     }
 }
