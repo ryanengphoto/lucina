@@ -348,9 +348,6 @@ public class PlayerMovement : MonoBehaviour
                 breathing.Pause();
                 siren.Pause();
             }
-                
-
-                
             else 
             {
                 audioSource.UnPause();
@@ -362,7 +359,6 @@ public class PlayerMovement : MonoBehaviour
                 siren.UnPause();                
             }
 
-
             pauseCanvas.gameObject.SetActive(isPaused);
         }
 
@@ -373,8 +369,12 @@ public class PlayerMovement : MonoBehaviour
         isPaused = false;
         Time.timeScale = 1;
         pauseCanvas.gameObject.SetActive(isPaused);
-        //Cursor.lockState = CursorLockMode.Locked;
+        Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
 
+    public void quitGame()
+    {
+        Application.Quit();
+    }
 }
