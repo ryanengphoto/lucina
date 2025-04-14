@@ -10,6 +10,12 @@ public class LookAtMonster : MonoBehaviour
     public AnalogGlitch glitchEffect;
     public float health = 100.0f;
     public bool looking, canRecharge;
+    public bool lookingAngelOne;
+    public bool lookingAngelTwo;
+    public bool lookingAngelThree;
+    public GameObject angelOne;
+    public GameObject angelTwo;
+    public GameObject angelThree;
     public AudioSource glitchSound;
     public float regenRate = 5.0f;
     public float damage = 10.0f;
@@ -38,6 +44,29 @@ public class LookAtMonster : MonoBehaviour
     void Update()
     {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(playerCam);
+
+        if (GeometryUtility.TestPlanesAABB(planes, angelOne.GetComponent<Renderer>().bounds)){
+            lookingAngelOne = true;
+            angelOne.GetComponent<AngelAI>().SetLookingAt(true);
+        } else {
+            lookingAngelOne = false;
+            angelOne.GetComponent<AngelAI>().SetLookingAt(false);
+        }
+        if (GeometryUtility.TestPlanesAABB(planes, angelTwo.GetComponent<Renderer>().bounds)){
+            lookingAngelTwo = true;
+            angelTwo.GetComponent<AngelAI>().SetLookingAt(true);
+        } else {
+            lookingAngelTwo = false;
+            angelTwo.GetComponent<AngelAI>().SetLookingAt(false);
+        }
+        if (GeometryUtility.TestPlanesAABB(planes, angelThree.GetComponent<Renderer>().bounds)){
+            lookingAngelThree = true;
+            angelThree.GetComponent<AngelAI>().SetLookingAt(true);
+        } else {
+            lookingAngelThree = false;
+            angelThree.GetComponent<AngelAI>().SetLookingAt(false);
+        }
+
         if (GeometryUtility.TestPlanesAABB(planes, Monster.GetComponent<Renderer>().bounds))
         {
             looking = true;

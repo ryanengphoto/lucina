@@ -6,6 +6,7 @@ TagManager:
   tags:
   - Music
   - Monster
+  - houseWall
   layers:
   - Default
   - TransparentFX
@@ -13,9 +14,9 @@ TagManager:
   - Camera
   - Water
   - UI
-  - 
-  - 
-  - 
+  - memento
+  - player
+  - monster
   - 
   - 
   - 
