@@ -12,6 +12,7 @@ public class VideoSettings : MonoBehaviour
         // Set current dropdown selection
         dropdown.value = Screen.fullScreenMode == FullScreenMode.FullScreenWindow ? 0 : 1;
         dropdown.onValueChanged.AddListener(ChangeScreenMode);
+
         sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", 2f);
         sensitivitySlider.onValueChanged.AddListener(SetSens);
     }
@@ -33,3 +34,4 @@ public class VideoSettings : MonoBehaviour
         PlayerPrefs.SetFloat("Sensitivity", sens);
     }
 }
+
