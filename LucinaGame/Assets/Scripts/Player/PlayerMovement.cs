@@ -75,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource heartbeat;
     public AudioSource breathing;
     public AudioSource siren;
+    public AudioSource[] pauseSources;
     private bool isSprinting = false;
     
 
@@ -405,6 +406,9 @@ public class PlayerMovement : MonoBehaviour
                 heartbeat.Pause();
                 breathing.Pause();
                 siren.Pause();
+                for (int i=0; i<pauseSources.Length; i++) {
+                    pauseSources[i].Pause();
+                }
             }
             else 
             {
@@ -414,7 +418,10 @@ public class PlayerMovement : MonoBehaviour
                 jumpscare.UnPause();
                 heartbeat.UnPause();
                 breathing.UnPause();
-                siren.UnPause();                
+                siren.UnPause();
+                for (int i=0; i<pauseSources.Length; i++) {
+                    pauseSources[i].UnPause();
+                }                                
             }
 
             pauseCanvas.gameObject.SetActive(isPaused);
