@@ -14,7 +14,8 @@ public class PlayerMovement : MonoBehaviour
     public bool outside = true;
     public bool makingNoise = false;
     public float walkSpeed = 5f;
-    public float lookSensitivity = 2.1f;
+    private float lookSensitivity;
+    public Slider sensitivitySlider;
     public float gravity = -9.81f;
     public Camera _camera;
     public Transform cameraParent;
@@ -97,6 +98,9 @@ public class PlayerMovement : MonoBehaviour
         // mouse stuff
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
+        sensitivitySlider.value = PlayerPrefs.GetFloat("Sensitivity", 2f);
+        lookSensitivity = sensitivitySlider.value;
+        sensitivitySlider.onValueChanged.AddListener(SetSens);
 
         // random
         defaultCameraHeight = _camera.transform.localPosition.y; // for crouching
@@ -104,6 +108,11 @@ public class PlayerMovement : MonoBehaviour
         targetRotation = flashLight.rotation; // inital flashlight rotation
 
         pauseCanvas.gameObject.SetActive(false);
+    }
+
+    void SetSens(float sens) {
+        lookSensitivity = sens;
+        PlayerPrefs.SetFloat("Sensitivity", lookSensitivity);
     }
 
     void Update()
