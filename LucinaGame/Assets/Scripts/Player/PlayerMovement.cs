@@ -21,6 +21,7 @@ public class PlayerMovement : MonoBehaviour
     public Transform flashLight;
     public KeyCode sprintKey = KeyCode.LeftShift;
     public KeyCode crouchKey = KeyCode.C;
+    public KeyCode crouchKey2 = KeyCode.LeftControl;
     public KeyCode pauseKey = KeyCode.Escape;
     private CharacterController controller;
     private Vector3 velocity;
@@ -184,7 +185,7 @@ public class PlayerMovement : MonoBehaviour
         }
 
         // crouching logic
-        if (Input.GetKey(crouchKey)) // update speed to crouch speed
+        if (Input.GetKey(crouchKey) || Input.GetKey(crouchKey2) ) // update speed to crouch speed
         {
             makingNoise = false;
             controller.height = crouchHeight;
