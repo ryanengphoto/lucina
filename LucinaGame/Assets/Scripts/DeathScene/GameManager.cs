@@ -9,11 +9,15 @@ public class GameManager : MonoBehaviour
 
     private void Awake()
     {
-        monster.SetActive(false);
         if (Instance == null)
         {
             Instance = this;
             DontDestroyOnLoad(gameObject);
+
+            if (monster != null)
+            {
+                monster.SetActive(false);
+            }
         }
         else
         {
@@ -34,6 +38,10 @@ public class GameManager : MonoBehaviour
     private IEnumerator SpawnMonsterWithDelay()
     {
         yield return new WaitForSeconds(10);
-        monster.SetActive(true);
+
+        if (monster != null)
+        {
+            monster.SetActive(true);
+        }
     }
 }

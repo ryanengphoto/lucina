@@ -2,10 +2,17 @@
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
+using UnityEngine.Rendering;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Basics")]
+    public AudioClip landingSound;
+    private bool wasGroundedLastFrame = true;
+    private float fallStartY;
+    private bool isFalling = false;
+    public bool outside = true;
+    public bool makingNoise = false;
     public float walkSpeed = 5f;
     public float lookSensitivity = 2.1f;
     public float gravity = -9.81f;
@@ -27,7 +34,7 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Crouching")]
     public float crouchSpeed = 3f;
-    private float crouchHeight = 0.1f;
+    private float crouchHeight = 0.5f;
     private float standingHeight = 2f;
     private bool isCrouching = false;
 
@@ -68,6 +75,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource heartbeat;
     public AudioSource breathing;
     public AudioSource siren;
+    private bool isSprinting = false;
     
 
 
@@ -133,6 +141,7 @@ public class PlayerMovement : MonoBehaviour
             moving = true;
         } else{
             moving = false;
+            makingNoise = false;
         }
 
         if (Input.GetKeyDown(sprintKey) && !isCrouching && hasRegenerated && moving)
@@ -176,6 +185,7 @@ public class PlayerMovement : MonoBehaviour
         // crouching logic
         if (Input.GetKey(crouchKey)) // update speed to crouch speed
         {
+            makingNoise = false;
             controller.height = crouchHeight;
             currentSpeed = crouchSpeed;
             isCrouching = true;
@@ -200,19 +210,62 @@ public class PlayerMovement : MonoBehaviour
             );
         }
 
-        // apply gravity over time
-        velocity.y += gravity * Time.deltaTime;
+        bool isGrounded = controller.isGrounded;
 
-        // apply movement and gravity
-        controller.Move(currentSpeed * Time.deltaTime * move);
-        controller.Move(velocity * Time.deltaTime);
+        // Start tracking fall when leaving the ground
+        if (!isGrounded && !isFalling)
+        {
+            isFalling = true;
+            fallStartY = transform.position.y;
+        }
+
+        // Just landed
+        if (isFalling && isGrounded)
+        {
+            float fallDistance = fallStartY - transform.position.y;
+
+            // If fell more than threshold (e.g., 1.5 meters)
+            if (fallDistance > 1.5f)
+            { 
+                // Volume scaled based on fall distance (maxing out at 8m)
+                float volume = Mathf.Clamp01((fallDistance - 1.5f) / 4.5f); // 0 at 1.5m, 1 at 8m+
+                audioSource.PlayOneShot(landingSound, volume);
+            }
+
+            isFalling = false;
+        }
+
+        // Reset velocity if grounded
+        if (isGrounded && velocity.y < 0)
+        {
+            velocity.y = -12f;
+        } else
+        {
+            velocity.y += gravity * Time.deltaTime;
+        }
+
+        // Apply movement and gravity
+        controller.Move((currentSpeed * move + velocity) * Time.deltaTime);
+
+        // Save grounded state for next frame
+        wasGroundedLastFrame = isGrounded;
+
+        isSprinting = currentSpeed == sprintSpeed;
+        
+        if (((currentSpeed * move + velocity) * Time.deltaTime).x >= 0.035 || ((currentSpeed * move + velocity) * Time.deltaTime).x <= -0.035 || ((currentSpeed * move + velocity) * Time.deltaTime).z >= 0.035 || ((currentSpeed * move + velocity) * Time.deltaTime).z <= -0.035)
+        {
+            if (!isCrouching && !outside)
+            {
+                makingNoise = true;
+            }
+        }
 
         // footstep sounds
         if (moving)
         {
             timeSinceLastStep += Time.deltaTime;
 
-            if (currentSpeed == sprintSpeed)
+            if (isSprinting)
             {
                 footstepInterval = 0.35f;
             }
@@ -287,14 +340,19 @@ public class PlayerMovement : MonoBehaviour
     }
 
     private void PlayRandomFootstepSound() // sounds for footsteps --- janky needs better solution
-{
-    if (footstepSounds.Length > 0)
     {
-        int randomIndex = Random.Range(0, footstepSounds.Length);
-        audioSource.PlayOneShot(footstepSounds[randomIndex], 0.25f); // Adjusted to 0.25f (half of 0.5f)
+        if (footstepSounds.Length > 0)
+        {
+            int randomIndex = Random.Range(0, footstepSounds.Length);
+            if(isCrouching){
+                audioSource.PlayOneShot(footstepSounds[randomIndex], 0.1f);
+            } else if (isSprinting){
+                audioSource.PlayOneShot(footstepSounds[randomIndex], 0.5f);
+            } else {
+                audioSource.PlayOneShot(footstepSounds[randomIndex], 0.4f);
+            }
+        }
     }
-}
-
 
     private void HandleHeadBobbing() // adds "realistic" movement of camera
     {
@@ -376,5 +434,25 @@ public class PlayerMovement : MonoBehaviour
     public void quitGame()
     {
         Application.Quit();
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("houseWall") && outside == true)
+        {
+            outside = false;
+            if(moving && !isCrouching){
+                makingNoise = true;
+            }
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("houseWall") && outside == false)
+        {
+            outside = true;
+            makingNoise = false;
+        }
     }
 }

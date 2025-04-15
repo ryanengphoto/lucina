@@ -31,7 +31,7 @@ public class WINAnimation : MonoBehaviour
         videoPlayer.gameObject.SetActive(false);
 
         string gameOverMessage = "You Won!";
-        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/3";
+        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/6";
 
         yield return StartCoroutine(TypeText(gameOverText, gameOverMessage));
 

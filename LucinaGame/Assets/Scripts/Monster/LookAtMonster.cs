@@ -10,6 +10,12 @@ public class LookAtMonster : MonoBehaviour
     public AnalogGlitch glitchEffect;
     public float health = 100.0f;
     public bool looking, canRecharge;
+    public bool lookingAngelOne;
+    public bool lookingAngelTwo;
+    public bool lookingAngelThree;
+    public GameObject angelOne;
+    public GameObject angelTwo;
+    public GameObject angelThree;
     public AudioSource glitchSound;
     public float regenRate = 5.0f;
     public float damage = 10.0f;
@@ -21,6 +27,7 @@ public class LookAtMonster : MonoBehaviour
     public AudioSource heartBeat;
     public GameObject jumpscareImage;
     public float jumpscareDuration = 1f;
+    private bool inGarden = false;
 
     private void OnCollisionEnter(Collision collision)
     {
@@ -38,6 +45,38 @@ public class LookAtMonster : MonoBehaviour
     void Update()
     {
         Plane[] planes = GeometryUtility.CalculateFrustumPlanes(playerCam);
+
+        if(inGarden){
+            if (GeometryUtility.TestPlanesAABB(planes, angelOne.GetComponent<Renderer>().bounds)){
+                lookingAngelOne = true;
+                angelOne.GetComponent<AngelAI>().SetLookingAt(true);
+            } else {
+                lookingAngelOne = false;
+                angelOne.GetComponent<AngelAI>().SetLookingAt(false);
+            }
+            if (GeometryUtility.TestPlanesAABB(planes, angelTwo.GetComponent<Renderer>().bounds)){
+                lookingAngelTwo = true;
+                angelTwo.GetComponent<AngelAI>().SetLookingAt(true);
+            } else {
+                lookingAngelTwo = false;
+                angelTwo.GetComponent<AngelAI>().SetLookingAt(false);
+            }
+            if (GeometryUtility.TestPlanesAABB(planes, angelThree.GetComponent<Renderer>().bounds)){
+                lookingAngelThree = true;
+                angelThree.GetComponent<AngelAI>().SetLookingAt(true);
+            } else {
+                lookingAngelThree = false;
+                angelThree.GetComponent<AngelAI>().SetLookingAt(false);
+            }
+        } else {
+            lookingAngelOne = true;
+            angelOne.GetComponent<AngelAI>().SetLookingAt(true);
+            lookingAngelTwo = true;
+            angelTwo.GetComponent<AngelAI>().SetLookingAt(true);
+            lookingAngelThree = true;
+            angelThree.GetComponent<AngelAI>().SetLookingAt(true);
+        }
+
         if (GeometryUtility.TestPlanesAABB(planes, Monster.GetComponent<Renderer>().bounds))
         {
             looking = true;
@@ -151,11 +190,30 @@ public class LookAtMonster : MonoBehaviour
 
         jumpscareImage.SetActive(true);
 
-        yield return new WaitForSeconds(flickerDuration - flickerTime);
-
-        jumpscareImage.SetActive(false);
-
         // Load the death scene after the jumpscare
         SceneManager.LoadScene("DEATH_SCENE");
+    }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        if (other.CompareTag("garden") && inGarden == false)
+        {
+            inGarden = true;
+        }
+        if (other.CompareTag("monster"))
+        {
+            glitchEffect.scanLineJitter = 2;
+            glitchEffect.colorDrift = 2;
+            glitchSound.volume = 1.5f;
+            StartCoroutine(ShowJumpScare());
+        }
+    }
+
+    private void OnTriggerExit(Collider other)
+    {
+        if (other.CompareTag("garden") && inGarden == true)
+        {
+            inGarden = false;
+        }
     }
 }

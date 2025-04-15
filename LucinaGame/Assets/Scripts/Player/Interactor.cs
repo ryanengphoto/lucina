@@ -17,6 +17,7 @@ public class Interactor : MonoBehaviour
     public TextMeshProUGUI momentosText;
     public AudioSource audioSource;
     public AudioSource sirenSound;
+    public PlayerMovement playerMovement;
 
     private void Start()
     {
@@ -39,6 +40,7 @@ public class Interactor : MonoBehaviour
                 if (Input.GetKeyDown(KeyCode.E))
                 {
                     GameManager.Instance.UpdateMomentos(1);
+                    playerMovement.makingNoise = true;
                     UpdateMomentosText();
                     interactObj.Interact();
 
@@ -51,7 +53,7 @@ public class Interactor : MonoBehaviour
                     {
                         StartCoroutine(PlaySirenAfterDelay(5f));  
                     }
-                    else if (GameManager.Instance.momentos == 3)
+                    else if (GameManager.Instance.momentos == 6)
                     {
                         SceneManager.LoadScene("WIN_SCENE");
                     }
@@ -79,7 +81,7 @@ public class Interactor : MonoBehaviour
     {
         if (momentosText != null)
         {
-            momentosText.text = "Mementos: " + GameManager.Instance.momentos.ToString();
+            momentosText.text = "Mementos: " + GameManager.Instance.momentos.ToString() + "/6";
         }
     }
 }

@@ -528,7 +528,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 497958424}
-  - component: {fileID: 497958423}
+  - component: {fileID: 497958425}
   m_Layer: 0
   m_Name: Manager
   m_TagString: Untagged
@@ -536,25 +536,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &497958423
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 497958422}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ed6bbdaaf0e14ce409f4b859a65269bd, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  videoPlayer: {fileID: 32602571}
-  gameOverText: {fileID: 558420241}
-  roomsText: {fileID: 525278406}
-  giveUpButton: {fileID: 1503329493}
-  tryAgainButton: {fileID: 616779591}
-  typeSpeed: 0.1
-  keyPressAudio: {fileID: 1081090429}
 --- !u!4 &497958424
 Transform:
   m_ObjectHideFlags: 0
@@ -570,6 +551,25 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &497958425
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 497958422}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0624cec1a8f7da448a1aedde7c2000f3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  videoPlayer: {fileID: 32602571}
+  gameOverText: {fileID: 558420241}
+  roomsText: {fileID: 525278406}
+  giveUpButton: {fileID: 1503329493}
+  tryAgainButton: {fileID: 616779591}
+  typeSpeed: 0.1
+  keyPressAudio: {fileID: 1081090429}
 --- !u!1 &525278404
 GameObject:
   m_ObjectHideFlags: 0

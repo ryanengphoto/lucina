@@ -16,10 +16,12 @@ public class MonsterAI : MonoBehaviour
     private Vector3 lastPosition;
     private float stuckTimer = 0f;
     private float stuckThreshold = 5f;
-    private float lowMovementThreshold = 0.4f;  // Minimum distance before considering it low movement
-    private float lowMovementTime = 0f;  // Timer to track how long the monster is moving slowly
+    private float lowMovementThreshold = 0.4f;
+    private float lowMovementTime = 0f; 
+    private bool isDisabled = false;
+    private float cooldownDuration = 0f;
+    private bool cooldownActive = false;
 
-    // Footsteps AudioSource
     public AudioSource footstepsAudioSource;
 
     private void Start()
@@ -31,22 +33,25 @@ public class MonsterAI : MonoBehaviour
 
     private void Update()
     {
-        FacePlayer();
-
-        // Calculate distance to player
-        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
-
-        // Teleport if necessary based on distance to player or if stuck
-        if (seen && !isPlayerLooking && (distanceToPlayer <= 75 || stuckTimer >= stuckThreshold && distanceToPlayer >= 40))
+        if (isDisabled)
         {
-            Teleport();
-            stuckTimer = 0f; 
+            navMeshAgent.speed = 0f;
+            HandleFootstepsSound();
+            return;
         }
 
-        // Check if the player is looking at the monster
+        FacePlayer();
+
+        float distanceToPlayer = Vector3.Distance(player.transform.position, transform.position);
+
+        if (seen && !isPlayerLooking && (distanceToPlayer <= 75 || stuckTimer >= stuckThreshold && distanceToPlayer >= 40))
+        {
+            StartCooldownAndDisable();
+            stuckTimer = 0f;
+        }
+
         CheckIfPlayerIsLooking();
 
-        // Move toward the player unless the player is looking
         if (!isPlayerLooking)
         {
             navMeshAgent.speed = 10f;
@@ -68,7 +73,7 @@ public class MonsterAI : MonoBehaviour
         }
         else
         {
-            lowMovementTime = 0f; 
+            lowMovementTime = 0f;
         }
 
         if (Vector3.Distance(lastPosition, transform.position) < 0.1f)
@@ -84,6 +89,7 @@ public class MonsterAI : MonoBehaviour
 
         lastPosition = transform.position;
     }
+
 
     private void CheckIfPlayerIsLooking()
     {
@@ -107,8 +113,8 @@ public class MonsterAI : MonoBehaviour
     {
         Transform randomSpot;
 
-        int startRange = GameManager.Instance.momentos >= 2 ? 4 : 0; 
-        int endRange = GameManager.Instance.momentos >= 2 ? teleportSpots.Length : 8; 
+        int startRange = GameManager.Instance.momentos >= 4 ? 4 : 0; 
+        int endRange = GameManager.Instance.momentos >= 4 ? teleportSpots.Length : 8; 
 
         do
         {
@@ -139,16 +145,57 @@ public class MonsterAI : MonoBehaviour
         return distanceMoved < lowMovementThreshold;
     }
 
-    // Function to handle footsteps sound
     private void HandleFootstepsSound()
     {
-        if (navMeshAgent.velocity.magnitude > 0.1f && !footstepsAudioSource.isPlaying) // If the monster is moving and the sound is not already playing
+        if (navMeshAgent.velocity.magnitude > 0.1f && !footstepsAudioSource.isPlaying) 
         {
-            footstepsAudioSource.Play();  // Play the footsteps sound
+            footstepsAudioSource.Play();
         }
-        else if (navMeshAgent.velocity.magnitude <= 0.1f && footstepsAudioSource.isPlaying) // If the monster stops moving and the sound is playing
+        else if (navMeshAgent.velocity.magnitude <= 0.1f && footstepsAudioSource.isPlaying) 
         {
-            footstepsAudioSource.Stop();  // Stop the footsteps sound
+            footstepsAudioSource.Stop(); 
         }
+    }
+
+    private float GetCooldownDuration()
+    {
+        int mementos = GameManager.Instance.momentos;
+
+        if(mementos >= 5){
+            return 0f;
+        }
+        float baseMin = 5f;
+        float baseMax = 10f;
+        
+        float minCooldown = Mathf.Lerp(baseMin, 1.5f, (mementos - 1) / 5f);
+        float maxCooldown = Mathf.Lerp(baseMax, 3f, (mementos - 1) / 5f);
+        
+        return Random.Range(minCooldown, maxCooldown);
+    }
+
+    private void StartCooldownAndDisable()
+    {
+        if (!cooldownActive)
+        {
+            isDisabled = true;
+            cooldownDuration = GetCooldownDuration();
+            cooldownActive = true;
+
+            navMeshAgent.enabled = false;
+            transform.position = Vector3.zero;
+
+            StartCoroutine(EnableAfterCooldown());
+        }
+    }
+
+    private IEnumerator EnableAfterCooldown()
+    {
+        yield return new WaitForSeconds(cooldownDuration);
+
+        Teleport();
+        navMeshAgent.enabled = true;
+
+        isDisabled = false;
+        cooldownActive = false;
     }
 }
