@@ -9,6 +9,13 @@ TagManager:
   - houseWall
   - garden
   - monster
+  - Note1
+  - Note2
+  - Note3
+  - Note4
+  - Note5
+  - safeRoom
+  - Wall
   layers:
   - Default
   - TransparentFX

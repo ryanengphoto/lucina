@@ -1,13 +1,16 @@
-//using Unity.VisualScripting.ReorderableList;
 using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.Audio;
 using UnityEngine.Rendering;
+using System;
+using System.Collections;
+using UnityEngine.SceneManagement;
 
 public class PlayerMovement : MonoBehaviour
 {
     [Header("Basics")]
     public AudioClip landingSound;
+    public GameObject monster;
     private bool wasGroundedLastFrame = true;
     private float fallStartY;
     private bool isFalling = false;
@@ -78,9 +81,7 @@ public class PlayerMovement : MonoBehaviour
     public AudioSource breathing;
     public AudioSource siren;
     public AudioSource[] pauseSources;
-    private bool isSprinting = false;
-    
-
+    public bool isSprinting = false;
 
     [Header("Random")]
     // these are for  the flashlight while sprinting
@@ -90,10 +91,17 @@ public class PlayerMovement : MonoBehaviour
 
     [Header("Pause Menu")]
     public Canvas pauseCanvas;
+    private MonsterAI monsterAI;
+    public Interactor interactor;
 
     void Start()
     {
         controller = GetComponent<CharacterController>();
+
+        if (monster != null)
+        {
+            monsterAI = monster.GetComponent<MonsterAI>();
+        }
 
         // mouse stuff
         Cursor.lockState = CursorLockMode.Locked;
@@ -117,6 +125,27 @@ public class PlayerMovement : MonoBehaviour
 
     void Update()
     {
+        Collider[] colliders = Physics.OverlapSphere(transform.position, detectionRadius);
+        int angelCount = 0;
+
+        foreach (Collider col in colliders)
+        {
+            if (col.GetComponent<AngelAI>() != null)
+                angelCount++;
+        }
+
+        if (angelCount >= 3 && !isPlaying)
+        {
+            isPlaying = true;
+            if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+            fadeRoutine = StartCoroutine(FadeIn(creepyAudioSource, fadeDuration, creepyMaxVolume));
+        }
+        else if (angelCount < 3 && isPlaying)
+        {
+            isPlaying = false;
+            if (fadeRoutine != null) StopCoroutine(fadeRoutine);
+            fadeRoutine = StartCoroutine(FadeOut(creepyAudioSource, fadeDuration));
+        }
         if (!isPaused) 
         {
             // player movement
@@ -126,7 +155,9 @@ public class PlayerMovement : MonoBehaviour
             UpdateTilt();
 
             // mouse movement
-            MouseLook();
+            if(!interactor.inNote){
+                MouseLook();
+            }
 
             // head bobbing effect
             HandleHeadBobbing();
@@ -223,30 +254,29 @@ public class PlayerMovement : MonoBehaviour
 
         bool isGrounded = controller.isGrounded;
 
-        // Start tracking fall when leaving the ground
         if (!isGrounded && !isFalling)
         {
             isFalling = true;
             fallStartY = transform.position.y;
         }
 
-        // Just landed
         if (isFalling && isGrounded)
         {
             float fallDistance = fallStartY - transform.position.y;
 
-            // If fell more than threshold (e.g., 1.5 meters)
             if (fallDistance > 1.5f)
             { 
-                // Volume scaled based on fall distance (maxing out at 8m)
-                float volume = Mathf.Clamp01((fallDistance - 1.5f) / 4.5f); // 0 at 1.5m, 1 at 8m+
+                makingNoise = true;
+
+                float normalizedFall = Mathf.Clamp01((fallDistance - 1.5f) / 15f);
+                float volume = Mathf.Pow(normalizedFall, 2);
+
                 audioSource.PlayOneShot(landingSound, volume);
             }
 
             isFalling = false;
         }
 
-        // Reset velocity if grounded
         if (isGrounded && velocity.y < 0)
         {
             velocity.y = -12f;
@@ -255,10 +285,8 @@ public class PlayerMovement : MonoBehaviour
             velocity.y += gravity * Time.deltaTime;
         }
 
-        // Apply movement and gravity
         controller.Move((currentSpeed * move + velocity) * Time.deltaTime);
-
-        // Save grounded state for next frame
+        
         wasGroundedLastFrame = isGrounded;
 
         isSprinting = currentSpeed == sprintSpeed;
@@ -354,13 +382,13 @@ public class PlayerMovement : MonoBehaviour
     {
         if (footstepSounds.Length > 0)
         {
-            int randomIndex = Random.Range(0, footstepSounds.Length);
+            int randomIndex = UnityEngine.Random.Range(0, footstepSounds.Length);
             if(isCrouching){
                 audioSource.PlayOneShot(footstepSounds[randomIndex], 0.1f);
             } else if (isSprinting){
-                audioSource.PlayOneShot(footstepSounds[randomIndex], 0.5f);
-            } else {
                 audioSource.PlayOneShot(footstepSounds[randomIndex], 0.4f);
+            } else {
+                audioSource.PlayOneShot(footstepSounds[randomIndex], 0.3f);
             }
         }
     }
@@ -398,6 +426,46 @@ public class PlayerMovement : MonoBehaviour
         }
     }
 
+    [SerializeField] private float detectionRadius = 40f;
+    [SerializeField] private float fadeDuration = 1.5f;
+    [SerializeField] private AudioSource creepyAudioSource;
+    [SerializeField] private float creepyMaxVolume = 0.75f;
+
+    private Coroutine fadeRoutine;
+    private bool isPlaying = false;
+
+    private IEnumerator FadeIn(AudioSource audioSource, float duration, float maxVolume)
+    {
+        if (!audioSource.isPlaying) audioSource.Play();
+        float time = 0f;
+        audioSource.volume = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(0f, maxVolume, time / duration);
+            yield return null;
+        }
+
+        audioSource.volume = maxVolume;
+    }
+
+    private IEnumerator FadeOut(AudioSource audioSource, float duration)
+    {
+        float startVolume = audioSource.volume;
+        float time = 0f;
+
+        while (time < duration)
+        {
+            time += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        audioSource.Stop();
+    }
+
     private void HandlePausing() 
     {
         if (Input.GetKeyDown(pauseKey))
@@ -431,7 +499,9 @@ public class PlayerMovement : MonoBehaviour
                 siren.UnPause();
                 for (int i=0; i<pauseSources.Length; i++) {
                     pauseSources[i].UnPause();
-                }                                
+                }
+
+                interactor.closeNote();                   
             }
 
             pauseCanvas.gameObject.SetActive(isPaused);
@@ -453,23 +523,38 @@ public class PlayerMovement : MonoBehaviour
         Application.Quit();
     }
 
-    private void OnTriggerEnter(Collider other)
+   private void OnTriggerEnter(Collider other)
+{
+    if (other.CompareTag("houseWall") && outside == true)
     {
-        if (other.CompareTag("houseWall") && outside == true)
+        Debug.Log("inside");
+        outside = false;
+
+        if (moving && !isCrouching)
         {
-            outside = false;
-            if(moving && !isCrouching){
-                makingNoise = true;
-            }
+            makingNoise = true;
+        }
+
+        if(monster.activeSelf){
+            Debug.Log("stop monster");
+            monsterAI.WarpAndStop();
         }
     }
+}
 
     private void OnTriggerExit(Collider other)
     {
         if (other.CompareTag("houseWall") && outside == false)
         {
+            Debug.Log("outside");
             outside = true;
             makingNoise = false;
+
+            if (GameManager.Instance.momentos >= 1 && monster.activeSelf)
+            {
+                Debug.Log("start monster");
+                monsterAI.ReactivateMovement();
+            }
         }
     }
 }
