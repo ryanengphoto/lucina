@@ -53,15 +53,17 @@ public class DeathAnimation : MonoBehaviour
         }
     }
 
-    private void TryAgain()
+    public void TryAgain()
     {
         keyPressAudio.Play();  
+        GameManager.Instance.ResetGame();
         SceneManager.LoadScene("MAIN_MAP");
     }
 
-    private void QuitGame()
+    public void QuitGame()
     {
         keyPressAudio.Play();  
+        GameManager.Instance.ResetGame();
         SceneManager.LoadScene("MAIN_MENU");
     }
 }
