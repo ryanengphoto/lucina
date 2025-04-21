@@ -27,11 +27,9 @@ public class MementoRandomizer : MonoBehaviour
     {
         if (uniqueMementos.Length != 6)
         {
-            Debug.LogError("You must assign exactly 6 unique memento prefabs.");
             return;
         }
 
-        // Location configuration: (spawn points, mementos to place)
         Dictionary<string, (Transform[], int)> locationData = new Dictionary<string, (Transform[], int)>
         {
             { "Outside", (outsideSpots, 1) },
@@ -41,7 +39,6 @@ public class MementoRandomizer : MonoBehaviour
             { "Union", (unionSpots, 1) }
         };
 
-        // Create a working list of mementos and shuffle them
         List<GameObject> shuffledMementos = new List<GameObject>(uniqueMementos);
         Shuffle(shuffledMementos);
 
@@ -70,33 +67,26 @@ public class MementoRandomizer : MonoBehaviour
                 Instantiate(memento, spawnPoint.position, spawnPoint.rotation);
 
                 if(location == "Outside" && chosenSpotIndex == 1){
-                    Debug.Log("radiotower");
                     poles[0].GetComponentInChildren<LightBlinker>().off = false;
                     poles[0].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Garden" && chosenSpotIndex == 0){
-                    Debug.Log("greenhouse");
                     poles[1].GetComponentInChildren<LightBlinker>().off = false;
                     poles[1].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Garden" && chosenSpotIndex == 1){
-                    Debug.Log("cabin on");
                     poles[2].GetComponentInChildren<LightBlinker>().off = false;
                     poles[2].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Garden" && chosenSpotIndex == 2){
-                    Debug.Log("path and grave on");
                     poles[3].GetComponentInChildren<LightBlinker>().off = false;
                     poles[3].GetComponentInChildren<LightBlinker>().favorOn = true;
                     poles[4].GetComponentInChildren<LightBlinker>().off = false;
                     poles[4].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Dorms" && chosenSpotIndex == 1 || location == "Dorms" && chosenSpotIndex == 0){
-                    Debug.Log("dorm1");
                     poles[6].GetComponentInChildren<LightBlinker>().off = false;
                     poles[6].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Dorms" && chosenSpotIndex == 2 || location == "Dorms" && chosenSpotIndex == 3){
-                    Debug.Log("dorm2");
                     poles[5].GetComponentInChildren<LightBlinker>().off = false;
                     poles[5].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } else if (location == "Dorms" && chosenSpotIndex == 4 || location == "Dorms" && chosenSpotIndex == 6 || location == "Dorms" && chosenSpotIndex == 5){
-                    Debug.Log("dorm3");
                     poles[7].GetComponentInChildren<LightBlinker>().off = false;
                     poles[7].GetComponentInChildren<LightBlinker>().favorOn = true;
                 } 

@@ -90,13 +90,13 @@ public class BlindMonsterAI : MonoBehaviour
             isInvestigating = true;
             Vector3 lastHeardPosition = player.transform.position;
 
-            if (breathingAudio && breathingAudio.isPlaying)
+            if (breathingAudio && breathingAudio.isPlaying && Time.timeScale == 1)
                 breathingAudio.Stop();
 
-            if (runningAudio && !runningAudio.isPlaying)
+            if (runningAudio && !runningAudio.isPlaying && Time.timeScale == 1)
                 runningAudio.Play();
 
-            if (!heartBeat.isPlaying)
+            if (!heartBeat.isPlaying && Time.timeScale == 1)
                 heartBeat.Play();
 
             agent.speed = sprintSpeed;
@@ -126,7 +126,6 @@ public class BlindMonsterAI : MonoBehaviour
 
                     if (stuckTimer >= 2f)
                     {
-                        Debug.Log("BlindMonsterAI: Stuck for too long, picking new patrol point.");
                         agent.ResetPath();
                         PickNextPatrolPoint();
                         StopAllCoroutines();

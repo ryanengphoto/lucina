@@ -60,6 +60,7 @@ public class mainMenu : MonoBehaviour
         {
             typing = false;
             skip.SetActive(false);
+            staticSound.volume = 0;
             MusicClass musicObject = MusicClass._instance;
             StopAllCoroutines();
             musicObject.StopMusic();
@@ -157,9 +158,8 @@ public class mainMenu : MonoBehaviour
 
         foreach (char letter in message.ToCharArray())
         {
-            if (!typingAudioSource.isPlaying)
-            {
-                typingAudioSource.Play();
+            if(letter != ' '){
+                typingAudioSource.Play(); 
             }
 
             textElement.text += letter;

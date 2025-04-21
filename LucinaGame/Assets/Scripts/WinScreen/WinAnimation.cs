@@ -4,6 +4,7 @@ using UnityEngine.UI;
 using TMPro;
 using UnityEngine.SceneManagement;
 using Kino;
+using Unity.VisualScripting;
 
 public class WINAnimation : MonoBehaviour
 {
@@ -14,21 +15,21 @@ public class WINAnimation : MonoBehaviour
     public TextMeshProUGUI instructionsText;
     bool typing = false;
     private AnalogGlitch glitchEffect;
+    public CanvasGroup fadeCanvasGroup;
     
      
     private void Start()
     {
+        fadeCanvasGroup.gameObject.SetActive(false);
+        fadeCanvasGroup.alpha = 0f;
         if (typing) return;
         glitchEffect = Camera.main.GetComponent<AnalogGlitch>();
 
         glitchEffect.scanLineJitter = 0;
         glitchEffect.colorDrift = 0;
 
-        Cursor.lockState = CursorLockMode.None; 
-        Cursor.visible = true;
         Music.volume = 0f;
 
-        StartCoroutine(FadeIn(Music, 2f, 0.4f));
         StartCoroutine(StartWinSequence());
     }
 
@@ -36,7 +37,12 @@ public class WINAnimation : MonoBehaviour
     {
 
         typing = true;
-        yield return new WaitForSeconds(1f);
+        yield return new WaitForSeconds(2f);
+        yield return StartCoroutine(TypeMemento(instructionsText, "6 / 6"));
+        yield return new WaitForSeconds(2f);
+        Music.Play();
+        StartCoroutine(FadeIn(Music, 4f, 0.4f));
+        yield return new WaitForSeconds(4f);
         yield return StartCoroutine(TypeText(instructionsText, "You Did As Asked."));
 
         yield return new WaitForSeconds(1f);
@@ -46,9 +52,11 @@ public class WINAnimation : MonoBehaviour
         yield return StartCoroutine(TypeText(instructionsText, "You Cannot Escape The Past."));
 
         yield return new WaitForSeconds(1f);
-        yield return StartCoroutine(TypeText(instructionsText, "Only Acceptance."));
+        yield return StartCoroutine(TypeText(instructionsText, "Only Accept It."));
         yield return new WaitForSeconds(1f);
         
+        Cursor.lockState = CursorLockMode.None; 
+        Cursor.visible = true;
         menuButton.SetActive(true);
     }
 
@@ -68,20 +76,57 @@ public class WINAnimation : MonoBehaviour
         audioSource.volume = maxVolume;
     }
 
+    public IEnumerator FadeOut(AudioSource audioSource, float duration)
+    {
+        float startVolume = audioSource.volume;
+
+        float time = 0f;
+        while (time < duration)
+        {
+            fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, time / duration);
+            time += Time.deltaTime;
+            audioSource.volume = Mathf.Lerp(startVolume, 0f, time / duration);
+            yield return null;
+        }
+
+        audioSource.volume = 0f;
+        audioSource.Stop();
+        GameManager.Instance.ResetGame();
+        SceneManager.LoadScene("MAIN_MENU");
+    }
+
     private IEnumerator TypeText(TextMeshProUGUI textElement, string message)
     {
         textElement.text = "";
+        textElement.color = Color.white;
         foreach (char letter in message.ToCharArray())
         {
             textElement.text += letter;
-            keyPressAudio.Play();  
+            if(letter != ' '){
+                keyPressAudio.Play(); 
+            }
+             
             yield return new WaitForSeconds(typeSpeed);
+        }
+    }
+    
+    private IEnumerator TypeMemento(TextMeshProUGUI textElement, string message)
+    {
+        textElement.text = "";
+        textElement.color = Color.red;
+        foreach (char letter in message.ToCharArray())
+        {
+            textElement.text += letter;
+            if(letter != ' '){
+                keyPressAudio.Play(); 
+            }
+            yield return new WaitForSeconds(0.3f);
         }
     }
 
     public void MenuButton()
     {
-        GameManager.Instance.ResetGame();
-        SceneManager.LoadScene("MAIN_MENU");
+        fadeCanvasGroup.gameObject.SetActive(true);
+        StartCoroutine(FadeOut(Music, 2f));
     }
 }

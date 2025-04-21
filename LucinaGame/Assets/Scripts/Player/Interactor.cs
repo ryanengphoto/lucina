@@ -3,6 +3,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using Kino;
 
 interface IInteractable
 {
@@ -15,6 +16,8 @@ interface NoteInteract
 
 public class Interactor : MonoBehaviour
 {
+    public AnalogGlitch glitchEffect;
+    public AudioSource glitchSound;
     public GameObject openCross;
     public GameObject closedCross;
     public Transform InteractorSource;
@@ -33,16 +36,23 @@ public class Interactor : MonoBehaviour
     public GameObject CrouchInfo;
     public GameObject sprintInfo;
     public GameObject flashlightInfo;
+    public GameObject interact;
     public bool inNote = false;
     private Coroutine infoCoroutine;
     public float typingSpeed = 0.05f;
     public AudioSource typingAudioSource;
     public TextMeshProUGUI mementoText;
+    public CanvasGroup fadeCanvasGroup;
+    public float fadeDuration = 4f;
+    public GameObject jumpscareImage;
+    public bool showInteract = true;
 
 
     private void Start()
     {
         flashlightInfo.SetActive(true);
+        fadeCanvasGroup.alpha = 0f;
+        fadeCanvasGroup.gameObject.SetActive(false);
         StartInfoCoroutine(15f);
         UpdateMomentosText();
     }
@@ -60,24 +70,29 @@ public class Interactor : MonoBehaviour
         }
 
         Ray r = new Ray(InteractorSource.position, InteractorSource.forward);
+
         if (Physics.Raycast(r, out RaycastHit hitInfo, InteractRange))
         {
-            Debug.DrawRay(InteractorSource.position, InteractorSource.forward * InteractRange, Color.red);
-
             if (hitInfo.collider.gameObject.TryGetComponent(out IInteractable interactObj))
             {
                 if (!openCross.activeSelf)
                 {
+                    if(showInteract){
+                        interact.SetActive(true);
+                    }
+                    
                     openCross.SetActive(true);
                     closedCross.SetActive(false);
                 }
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    showInteract = false;
                     GameManager.Instance.UpdateMomentos(1);
                     playerMovement.makingNoise = true;
-
-                    StartCoroutine(UpdateMomentosText());
+                    if(GameManager.Instance.momentos != 6){
+                        StartCoroutine(UpdateMomentosText());
+                    }
 
                     interactObj.Interact();
 
@@ -92,29 +107,33 @@ public class Interactor : MonoBehaviour
                     }
                     else if (GameManager.Instance.momentos == 6)
                     {
-                        SceneManager.LoadScene("WIN_SCENE");
+                        fadeCanvasGroup.gameObject.SetActive(true);
+                        StartCoroutine(fadeToBlack());
                     }
                 }
-            }
-
-            if (hitInfo.collider.gameObject.TryGetComponent(out NoteInteract note))
+            } 
+            else if (hitInfo.collider.gameObject.TryGetComponent(out NoteInteract note))
             {
                 if (!openCross.activeSelf)
                 {
+                    if(showInteract){
+                        interact.SetActive(true);
+                    }
                     openCross.SetActive(true);
                     closedCross.SetActive(false);
                 }
 
                 if (Input.GetKeyDown(KeyCode.E))
                 {
+                    showInteract = false;
                     inNote = true;
+                    interact.SetActive(false);
                     if (paperNoise != null)
                     {
                         paperNoise.Play();
                     }
 
                     string tag = hitInfo.collider.tag;
-                    Debug.Log(tag);
                     closeButton.SetActive(true);
 
                     if(tag == "Note1"){
@@ -137,17 +156,49 @@ public class Interactor : MonoBehaviour
                     Cursor.lockState = CursorLockMode.None;
                     Cursor.visible = true;
                 }
-
+            } else {
+                interact.SetActive(false);
+                openCross.SetActive(false);
+                closedCross.SetActive(true);
             }
         }
         else
         {
             if (openCross.activeSelf)
             {
+                interact.SetActive(false);
                 openCross.SetActive(false);
                 closedCross.SetActive(true);
             }
         }
+    }
+
+    private IEnumerator fadeToBlack()
+    {
+        float elapsedTime = 0f;
+
+        while (elapsedTime < fadeDuration)
+        {
+            float t = elapsedTime / fadeDuration;
+            fadeCanvasGroup.alpha = Mathf.Lerp(0f, 1f, t);
+
+            elapsedTime += Time.deltaTime;
+
+            yield return null;
+        }
+
+        closedCross.SetActive(false);
+        fadeCanvasGroup.alpha = 0f;
+        glitchEffect.scanLineJitter = 2;
+        glitchEffect.colorDrift = 2;
+        glitchSound.volume = 1f;
+        
+        yield return new WaitForSeconds(0.5f);
+        jumpscareImage.SetActive(true);
+        yield return new WaitForSeconds(0.1f);
+        fadeCanvasGroup.alpha = 1f;
+        jumpscareImage.SetActive(false);
+        SceneManager.LoadScene("WIN_SCENE");
     }
 
     private IEnumerator UpdateMomentosText()
@@ -171,7 +222,9 @@ public class Interactor : MonoBehaviour
 
         foreach (char letter in message.ToCharArray())
         {
-            typingAudioSource.Play();
+            if(letter != ' '){
+                typingAudioSource.Play(); 
+            }
 
             textElement.text += letter;
             yield return new WaitForSeconds(typingSpeed);

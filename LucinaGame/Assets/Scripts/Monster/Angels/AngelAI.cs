@@ -9,6 +9,7 @@ public class AngelAI : MonoBehaviour
     [SerializeField] private AudioSource footstepsAudioSource;
     [SerializeField] private LayerMask obstacleMask;
     private Coroutine fadeOutRoutine;
+    public LookAtMonster playerScript;
 
 
     private NavMeshAgent agent;
@@ -29,7 +30,7 @@ public class AngelAI : MonoBehaviour
 
         bool isBlocked = IsObstructed();
 
-        if (!isBeingLookedAt || isBlocked)
+        if (!isBeingLookedAt || isBlocked && playerScript.inGarden)
         {
             if (canActivate)
             {
@@ -67,7 +68,7 @@ public class AngelAI : MonoBehaviour
     {
         if (agent.velocity.magnitude > 0.1f)
         {
-            if (!footstepsAudioSource.isPlaying)
+            if (!footstepsAudioSource.isPlaying && Time.timeScale == 1)
             {
                 footstepsAudioSource.time = Random.Range(0f, footstepsAudioSource.clip.length);
                 footstepsAudioSource.volume = 0.1f;

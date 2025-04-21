@@ -138,13 +138,13 @@ public class PlayerMovement : MonoBehaviour
         {
             isPlaying = true;
             if (fadeRoutine != null) StopCoroutine(fadeRoutine);
-            fadeRoutine = StartCoroutine(FadeIn(creepyAudioSource, fadeDuration, creepyMaxVolume));
+            fadeRoutine = StartCoroutine(FadeIn(creepyAudioSource, 5, creepyMaxVolume));
         }
         else if (angelCount < 3 && isPlaying)
         {
             isPlaying = false;
             if (fadeRoutine != null) StopCoroutine(fadeRoutine);
-            fadeRoutine = StartCoroutine(FadeOut(creepyAudioSource, fadeDuration));
+            fadeRoutine = StartCoroutine(FadeOut(creepyAudioSource, 5));
         }
         if (!isPaused) 
         {
@@ -219,6 +219,8 @@ public class PlayerMovement : MonoBehaviour
                 if (playerStamina >= maxStamina) {
                     playerStamina = maxStamina;
                     sliderCanvasGroup.alpha = 0;
+                    hasRegenerated = true;
+                } else if (playerStamina >= maxStamina/2) {
                     hasRegenerated = true;
                 }
             }
@@ -527,7 +529,6 @@ public class PlayerMovement : MonoBehaviour
 {
     if (other.CompareTag("houseWall") && outside == true)
     {
-        Debug.Log("inside");
         outside = false;
 
         if (moving && !isCrouching)
@@ -536,7 +537,6 @@ public class PlayerMovement : MonoBehaviour
         }
 
         if(monster.activeSelf){
-            Debug.Log("stop monster");
             monsterAI.WarpAndStop();
         }
     }
@@ -546,13 +546,11 @@ public class PlayerMovement : MonoBehaviour
     {
         if (other.CompareTag("houseWall") && outside == false)
         {
-            Debug.Log("outside");
             outside = true;
             makingNoise = false;
 
             if (GameManager.Instance.momentos >= 1 && monster.activeSelf)
             {
-                Debug.Log("start monster");
                 monsterAI.ReactivateMovement();
             }
         }

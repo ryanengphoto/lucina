@@ -31,7 +31,7 @@ public class DeathAnimation : MonoBehaviour
         videoPlayer.gameObject.SetActive(false);
 
         string gameOverMessage = "Game Over";
-        string roomsMessage = "Momentos Collected: " + GameManager.Instance.momentos + "/6";
+        string roomsMessage = "Mementos Collected: " + GameManager.Instance.momentos + "/6";
 
         yield return StartCoroutine(TypeText(gameOverText, gameOverMessage));
 
@@ -48,7 +48,9 @@ public class DeathAnimation : MonoBehaviour
         foreach (char letter in message.ToCharArray())
         {
             textElement.text += letter;
-            keyPressAudio.Play();  
+            if(letter != ' '){
+                keyPressAudio.Play(); 
+            }
             yield return new WaitForSeconds(typeSpeed);
         }
     }

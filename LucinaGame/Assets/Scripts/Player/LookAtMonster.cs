@@ -231,7 +231,6 @@ public class LookAtMonster : MonoBehaviour
         }
         if (other.CompareTag("safeRoom") && inGarden == false)
         {
-            
             inGarden = true;
         }
     }

@@ -134,7 +134,7 @@ public class MonsterAI : MonoBehaviour
 
     private void HandleFootstepsSound()
     {
-        if (navMeshAgent.velocity.magnitude > 0.1f && !footstepsAudioSource.isPlaying)
+        if (navMeshAgent.velocity.magnitude > 0.1f && !footstepsAudioSource.isPlaying && Time.timeScale == 1)
         {
             footstepsAudioSource.Play();
         }
