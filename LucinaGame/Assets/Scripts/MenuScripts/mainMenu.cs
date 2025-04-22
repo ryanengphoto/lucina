@@ -184,7 +184,10 @@ public class mainMenu : MonoBehaviour
             for (float t = 0; t < duration; t += Time.deltaTime)
             {
                 if(t >= duration/2){
-                    staticSound.volume = (t / duration)/8;
+                    if(!typing){
+                        staticSound.volume = (t / duration)/8;
+                    }
+                    
                     foreach (Light light in lightObjects)
                     {
                         light.intensity = 0;
